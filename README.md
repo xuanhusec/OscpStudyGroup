@@ -6,7 +6,10 @@
 ## 三、其他资源参考
 
 ## 四、与我交流
+
+我的微信
 ![wechart](img/wechart.jpg)
 
 
+团队公众号
 ![wechartmp](img/mp.png)
