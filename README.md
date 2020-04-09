@@ -6,4 +6,4 @@
 ## 三、其他资源参考
 
 ## 四、与我交流
-
+![wechart](img/wechart.jpg)
