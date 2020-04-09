@@ -7,3 +7,4 @@
 
 ## 四、与我交流
 ![wechart](img/wechart.jpg)
+![wechartmp](img/mp.png)
