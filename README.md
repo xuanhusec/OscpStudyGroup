@@ -1,2 +1,3 @@
-# OscpStudyGroup
-Oscp study group
+# Oscp公益学习组
+## 学习组简介
+希望提供建立公益学习组帮助大家汇总学习资源、分享学习经验。
