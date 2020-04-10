@@ -3,7 +3,7 @@
 希望提供建立公益学习组帮助大家汇总学习资源、分享学习经验。
 ## 二、学习资源整理
 
-0x0001-Kali基本操作.md
+[0x0001-Kali基本操作.md](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0001-Kali%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C.md)
 
 ## 三、其他资源参考
 **0、OSCP命令大全**：https://github.com/Elinpf/OSCP-survival-guide
