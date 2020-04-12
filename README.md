@@ -9,6 +9,17 @@
 
 [0x0001-Kali基本操作.md](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0001-Kali%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C.md)
 
+
+[0x0002-常用工具.md](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0002-%E5%B8%B8%E7%94%A8%E5%B7%A5%E5%85%B7.md)
+
+
+[0x0003-windows提权汇总.md](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0003-windows%E6%8F%90%E6%9D%83%E6%B1%87%E6%80%BB.md)
+
+
+[0x0004-反弹shell方法汇总.md](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0004-%E5%8F%8D%E5%BC%B9shell%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB.md)
+
+
+
 ## 三、其他资源参考
 **0、OSCP命令大全**：https://github.com/Elinpf/OSCP-survival-guide
 
