@@ -57,7 +57,16 @@
 
 
 
-## 四、与我交流
+## 四、OSCP自学笔记-靶机练习
+这个系列中笔者将抽取10台典型靶机作为练习目标，以OSCP学习及考试的角度进行练习，并进行经验总结，不仅是靶机的writeups，同时希望能帮助备考的同学整理思路、积累经验。方便练习我会把教程和靶机打包上传网盘分享。
+
+本系列完整教程将在知识星球“玄鹄安全-OSCP学习组”首发，欢迎各位备考同学捧场。
+
+
+[1-OSCP自学笔记-October靶机练习.pdf](https://github.com/xuanhusec/OscpStudyGroup/blob/master/%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%B3%BB%E5%88%97/1-OSCP%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0-October%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0.pdf)
+
+
+## 五、与我交流
 
 我的微信（微信号xuanhusec）
 
