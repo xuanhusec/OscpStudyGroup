@@ -19,6 +19,11 @@
 [0x0004-反弹shell方法汇总.md](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0004-%E5%8F%8D%E5%BC%B9shell%E6%96%B9%E6%B3%95%E6%B1%87%E6%80%BB.md)
 
 
+[0x0005-靶机推荐列表.xlsx](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0005-%E9%9D%B6%E6%9C%BA%E6%8E%A8%E8%8D%90%E5%88%97%E8%A1%A8.xlsx)
+
+
+[0x0006-考试报告模板.doc](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0006-%E8%80%83%E8%AF%95%E6%8A%A5%E5%91%8A%E6%A8%A1%E6%9D%BF.doc)
+
 
 ## 三、其他资源参考
 **0、OSCP命令大全**：https://github.com/Elinpf/OSCP-survival-guide
@@ -43,6 +48,12 @@
 
 
 **7、Windows提权辅助脚本**：https://github.com/pentestmonkey/windows-privesc-check
+
+
+**8、Windows提权辅助辅助工具**：https://github.com/bitsadmin/wesng
+
+
+**9、oscp备考解读**：https://www.aqniukt.com/course/13464
 
 
 
