@@ -11,17 +11,17 @@
 我的微信（微信号xuanhusec）
 
 
-![wechart](img/wechart.jpg)
+![wechart](../img/wechart.jpg)
 
 
 团队公众号（玄鹄安全）
 
 
-![wechartmp](img/mp.png)
+![wechartmp](../img/mp.png)
 
 
 
 更多优质资源可加入星球学习（玄鹄安全-OSCP学习组）
 
 
-![zsxq](img/xq.png)
+![zsxq](../img/xq.png)
