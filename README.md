@@ -25,6 +25,9 @@
 [0x0006-考试报告模板.doc](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0006-%E8%80%83%E8%AF%95%E6%8A%A5%E5%91%8A%E6%A8%A1%E6%9D%BF.doc)
 
 
+[0x0007-Buffer Overflow通关脚本框架.py](https://github.com/xuanhusec/OscpStudyGroup/blob/master/0x0007-Buffer%20Overflow%E9%80%9A%E5%85%B3%E8%84%9A%E6%9C%AC%E6%A1%86%E6%9E%B6.py)
+
+
 ## 三、其他资源参考
 **0、OSCP命令大全**：https://github.com/Elinpf/OSCP-survival-guide
 
