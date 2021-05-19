@@ -37,33 +37,36 @@
 **1、反弹shell方法汇总**：http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
 
 
-**2、linux提权方法汇总**：https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/
+**2、linux提权方法汇总**
 
-    2-1、Linux提权参考1 ：https://book.hacktricks.xyz/linux-unix/linux-privilege-escalation-checklist （配合linPEAS使用效果更佳）
+    2-1、https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/
 
-
-**3、windows提权方法汇总1**：https://www.fuzzysecurity.com/tutorials/16.html
-
-
-**4、windows提权方法汇总2**：https://github.com/netbiosX/Checklists/blob/master/Windows-Privilege-Escalation.md
+    2-1、https://book.hacktricks.xyz/linux-unix/linux-privilege-escalation-checklist （配合linPEAS使用效果更佳）
 
 
-**5、Linux提权辅助脚本**
+**3、windows提权方法汇总**
+
+    3-1、https://www.fuzzysecurity.com/tutorials/16.html
+    3-2、https://github.com/netbiosX/Checklists/blob/master/Windows-Privilege-Escalation.md
+
+
+**4、Linux提权辅助脚本**
     
-    https://www.securitysift.com/download/linuxprivchecker.py
-    https://github.com/diego-treitos/linux-smart-enumeration
-    https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
+    5-1、https://www.securitysift.com/download/linuxprivchecker.py
+    5-2、https://github.com/diego-treitos/linux-smart-enumeration
+    5-3、https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
 
 
-**7、Windows提权辅助脚本**：https://github.com/pentestmonkey/windows-privesc-check
+**5、Windows提权辅助脚本**
 
+    5-1、https://github.com/pentestmonkey/windows-privesc-check
+    5-2、https://github.com/bitsadmin/wesng
+    5-3、https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS
 
-**8、Windows提权辅助辅助工具**：https://github.com/bitsadmin/wesng
+**6、渗透测试方法论**
 
-
-**9、oscp备考解读**：https://www.aqniukt.com/course/13464
-
-
+    6-1、https://book.hacktricks.xyz/pentesting-methodology
+    
 
 ## 四、OSCP自学笔记-靶机练习
 这个系列中笔者将抽取10台典型靶机作为练习目标，以OSCP学习及考试的角度进行练习，并进行经验总结，不仅是靶机的writeups，同时希望能帮助备考的同学整理思路、积累经验。方便练习我会把教程和靶机打包上传网盘分享。
