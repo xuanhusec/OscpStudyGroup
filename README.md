@@ -39,6 +39,8 @@
 
 **2、linux提权方法汇总**：https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/
 
+***2-1 Linux提权参考1*** ：https://book.hacktricks.xyz/linux-unix/linux-privilege-escalation-checklist
+
 
 **3、windows提权方法汇总1**：https://www.fuzzysecurity.com/tutorials/16.html
 
