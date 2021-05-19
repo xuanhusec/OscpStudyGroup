@@ -39,7 +39,7 @@
 
 **2、linux提权方法汇总**：https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/
 
-    ***2-1、Linux提权参考1*** ：https://book.hacktricks.xyz/linux-unix/linux-privilege-escalation-checklist
+    2-1、Linux提权参考1 ：https://book.hacktricks.xyz/linux-unix/linux-privilege-escalation-checklist （配合linPEAS使用效果更佳）
 
 
 **3、windows提权方法汇总1**：https://www.fuzzysecurity.com/tutorials/16.html
@@ -48,10 +48,11 @@
 **4、windows提权方法汇总2**：https://github.com/netbiosX/Checklists/blob/master/Windows-Privilege-Escalation.md
 
 
-**5、Linux提权辅助脚本1**：https://www.securitysift.com/download/linuxprivchecker.py
-
-
-**6、linux提权辅助脚本2**：https://github.com/diego-treitos/linux-smart-enumeration
+**5、Linux提权辅助脚本**
+    
+    https://www.securitysift.com/download/linuxprivchecker.py
+    https://github.com/diego-treitos/linux-smart-enumeration
+    https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
 
 
 **7、Windows提权辅助脚本**：https://github.com/pentestmonkey/windows-privesc-check
